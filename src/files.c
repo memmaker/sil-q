@@ -2668,6 +2668,8 @@ void show_help_screen(int i)
         c_put_str(TERM_WHITE, " P", row, col);
         c_put_str(TERM_SLATE, "auto-explore", row, col + 3);
         row++;
+        c_put_str(TERM_WHITE, "Ret", row, col - 1);
+        c_put_str(TERM_SLATE, "command menu", row, col + 3);
         row++;
         c_put_str(TERM_WHITE, " m", row, col);
         c_put_str(TERM_SLATE, "main menu", row, col + 3);

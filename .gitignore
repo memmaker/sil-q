@@ -16,3 +16,4 @@ lib/user/*
 lib/data/*
 web/dist/
 web/stage/
+/.new

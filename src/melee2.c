@@ -1123,7 +1123,7 @@ static bool get_move_wander(monster_type* m_ptr, int* ty, int* tx)
         else
         {
             /* Random direction */
-            d = ddd[rand_int(8)];
+            d = rand_int(8); /* RVIP (ASan): ddd[] holds keypad directions (up to 9), not ddy_ddd[] indexes */
 
             y = y1 + ddy_ddd[d];
             x = x1 + ddx_ddd[d];
