@@ -740,7 +740,7 @@ bool option_norm[OPT_MAX] = {
     FALSE, /* OPT_center_player */
     FALSE, /* OPT_run_avoid_center */
     FALSE, /* xxx scroll_target */
-    FALSE, /* OPT_auto_more */
+    TRUE, /* OPT_auto_more */
     FALSE, /* OPT_know_monster_info */
     FALSE, /* OPT_auto_display_lists */
     TRUE, /* OPT_easy_main_menu */

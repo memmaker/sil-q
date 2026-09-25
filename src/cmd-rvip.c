@@ -1,7 +1,7 @@
 /* File: cmd-rvip.c */
 
 /*
- * RVIP additions (see ~/Games/RVIP.md):
+ * RVIP additions (see ~/Games/rvip-tools/RVIP.md):
  * - the command menu on Enter (every command, grouped like the help screen)
  * - the inventory / equipment screen with a cursor and item menus
  *
