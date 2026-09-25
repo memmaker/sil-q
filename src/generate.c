@@ -3966,6 +3966,9 @@ void generate_cave(void)
     /* The dungeon is not ready */
     character_dungeon = FALSE;
 
+    /* New level: forget what auto-explore has seen */
+    explore_reset();
+
     /* Don't know feeling yet */
     do_feeling = FALSE;
 

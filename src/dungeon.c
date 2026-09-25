@@ -964,22 +964,16 @@ static void process_command(void)
     /* Go up staircase */
     case '<':
     {
-        // Autosave
-        save_game_quietly = TRUE;
-        do_cmd_save_game();
-
-        do_cmd_go_up();
+        /* Take the stairs here, or walk to the nearest known ones */
+        do_cmd_stairs(TRUE);
         break;
     }
 
     /* Go down staircase */
     case '>':
     {
-        // Autosave
-        save_game_quietly = TRUE;
-        do_cmd_save_game();
-
-        do_cmd_go_down();
+        /* Take the stairs here, or walk to the nearest known ones */
+        do_cmd_stairs(FALSE);
         break;
     }
 
@@ -1008,6 +1002,13 @@ static void process_command(void)
     case 'D':
     {
         do_cmd_disarm();
+        break;
+    }
+
+    /* Auto-explore */
+    case 'P':
+    {
+        do_cmd_explore();
         break;
     }
 
@@ -1592,7 +1593,7 @@ static void process_player(void)
         }
 
         /* Check for "player abort" */
-        if (p_ptr->running || p_ptr->fletching || p_ptr->smithing
+        if (p_ptr->running || auto_explore || p_ptr->fletching || p_ptr->smithing
             || p_ptr->command_rep || (p_ptr->resting && !(turn & 0x7F)))
         {
             /* Do not wait */
@@ -1904,6 +1905,12 @@ static void process_player(void)
 
             // Pause to show enemies moving.
             Term_xtra(TERM_XTRA_DELAY, 500);
+        }
+
+        /* Auto-exploring */
+        else if (auto_explore)
+        {
+            explore_step();
         }
 
         /* Running */

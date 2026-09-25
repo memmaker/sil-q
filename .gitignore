@@ -4,3 +4,15 @@ src/sil
 src/sil.o.x86_64
 Sil.app
 .DS_Store
+# RVIP port: build output, local saves, web build
+src/sil.o
+src/sil.o.arm64
+*.orig-stairs
+/sil
+lib/save/*
+!lib/save/.gitignore
+lib/user/*
+!lib/user/.gitignore
+lib/data/*
+web/dist/
+web/stage/

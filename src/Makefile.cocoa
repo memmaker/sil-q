@@ -12,7 +12,7 @@ CC = clang
 LD = ld
 OPT ?= -O2
 
-ARCHS = x86_64
+ARCHS = arm64
 ARCHFLAGS = $(addprefix -arch ,$(ARCHS))
 WARNINGS = -W -Wall -Wno-unused-parameter -Wno-missing-field-initializers
 JUST_C = -std=c99 -Wdeclaration-after-statement

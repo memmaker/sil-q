@@ -2665,6 +2665,9 @@ void show_help_screen(int i)
         c_put_str(TERM_WHITE, " M", row, col);
         c_put_str(TERM_SLATE, "display map of level", row, col + 3);
         row++;
+        c_put_str(TERM_WHITE, " P", row, col);
+        c_put_str(TERM_SLATE, "auto-explore", row, col + 3);
+        row++;
         row++;
         c_put_str(TERM_WHITE, " m", row, col);
         c_put_str(TERM_SLATE, "main menu", row, col + 3);

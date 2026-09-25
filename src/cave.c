@@ -5020,6 +5020,9 @@ void disturb(int stop_stealth, int unused_flag)
     /* Cancel auto-commands */
     /* p_ptr->command_new = 0; */
 
+    /* Cancel auto-explore */
+    auto_explore = FALSE;
+
     /* Cancel repeated commands */
     if (p_ptr->command_rep)
     {
