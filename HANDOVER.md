@@ -1,6 +1,6 @@
 # Sil-Q 1.5.0: handover
 
-RVIP import (`~/Games/RVIP.md`, case A) and web port (`~/Games/rogue2wasm.md`).
+RVIP import (`~/Games/rvip-tools/RVIP.md`, case A) and web port (`~/Games/rogue2wasm.md`).
 
 ## Source and changes
 
