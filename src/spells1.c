@@ -5087,6 +5087,10 @@ void change_song(int song)
         return;
     }
 
+    /* RVIP: sound event */
+    if (song != SNG_NOTHING)
+        sound(SOUND_SING);
+
     // Reset the song duration counter if changing major theme
     if (song_to_change == 1)
     {

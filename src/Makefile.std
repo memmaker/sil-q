@@ -38,7 +38,7 @@ SRCS = \
   birth.c load.c squelch.c \
   wizard1.c wizard2.c obj-info.c \
   generate.c dungeon.c init1.c init2.c randart.c \
-  use-obj.c \
+  use-obj.c cmd-rvip.c \
   main-cap.c \
   main-gcu.c \
   main-x11.c maid-x11.c \
@@ -55,7 +55,7 @@ OBJS = \
   birth.o load.o squelch.o \
   wizard1.o wizard2.o obj-info.o \
   generate.o dungeon.o init1.o init2.o randart.o \
-  use-obj.o \
+  use-obj.o cmd-rvip.o \
   main-cap.o \
   main-gcu.o \
   main-x11.o maid-x11.o \
@@ -119,8 +119,8 @@ CC = gcc
 ##
 ## Variation -- "main-x11.c" & "main-gcu.c" (for Mac OS X)
 ##
-CFLAGS = -Wall -O1 -pipe -g -D"USE_X11" -D"USE_GCU"
-LIBS = -L/usr/X11/lib -lX11 -lcurses
+CFLAGS = -Wall -O1 -pipe -g -D"USE_X11" -D"USE_GCU" -I/opt/X11/include
+LIBS = -L/opt/X11/lib -lX11 -lcurses
 
 
 ##

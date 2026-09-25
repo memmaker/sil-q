@@ -602,6 +602,9 @@ bool make_attack_normal(monster_type* m_ptr)
         /* Monster hits player */
         if (!effect || (hit_result > 0))
         {
+            /* RVIP: sound event */
+            sound(SOUND_MON_HIT);
+
             /* Always disturbing */
             disturb(1, 0);
 
@@ -2168,6 +2171,10 @@ bool make_attack_ranged(monster_type* m_ptr, int attack)
     m_ptr->mflag &= ~(MFLAG_ALWAYS_CAST);
 
     /*** Execute the ranged attack chosen. ***/
+    /* RVIP: sound event for breaths (RF4_BRTH_FIRE .. RF4_BRTH_DARK) */
+    if ((attack >= 96 + 3) && (attack <= 96 + 6))
+        sound(SOUND_BREATH);
+
     switch (attack)
     {
     /* RF4_ARROW1, RF4_ARROW2 */

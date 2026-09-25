@@ -1045,6 +1045,7 @@ static bool do_cmd_open_chest(int y, int x, s16b o_idx)
         /* Success -- May still have traps */
         if (skill_check(PLAYER, score, difficulty, NULL) > 0)
         {
+            sound(SOUND_LOCKPICK);
             msg_print("You have picked the lock.");
             flag = TRUE;
         }
@@ -1134,6 +1135,7 @@ static bool do_cmd_disarm_chest(int y, int x, s16b o_idx)
     /* Success (get a lot of experience) */
     else if (result > 0)
     {
+        sound(SOUND_DISARM);
         msg_print("You have disarmed the chest.");
         o_ptr->pval = (0 - o_ptr->pval);
     }
@@ -2591,6 +2593,7 @@ static bool do_cmd_disarm_aux(int y, int x)
 
         /* Normal message otherwise */
         else
+            sound(SOUND_DISARM);
             msg_format("You have disarmed the %s.", name);
 
         /* Forget the trap */

@@ -513,3 +513,23 @@ P:^_N_FF55\r
 P:^_N_FFDA\r
 P:\[control-mod2-KP_9]
 P:\[control-KP_Page_Up]
+
+# Keypad Enter, + - * / . (RVIP: the item menus can be used from the keypad alone)
+
+A:\r
+P:^__FF8D\r
+
+A:+
+P:^__FFAB\r
+
+A:-
+P:^__FFAD\r
+
+A:*
+P:^__FFAA\r
+
+A:/
+P:^__FFAF\r
+
+A:.
+P:^__FFAE\r

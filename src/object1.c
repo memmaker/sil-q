@@ -2157,6 +2157,15 @@ void show_inven(void)
         /* Clear the line with the (possibly indented) index */
         put_str(tmp_val, j + 1, col);
 
+        /* RVIP: the cursor */
+        if (i == item_cursor)
+        {
+            c_put_str(TERM_L_BLUE, tmp_val, j + 1, col);
+            if (col)
+                c_put_str(TERM_L_BLUE, ">", j + 1, col - 1);
+            out_color[j] = TERM_L_BLUE;
+        }
+
         /* Display the entry itself */
         c_put_str(out_color[j], out_desc[j], j + 1, col + 3);
 
@@ -2269,6 +2278,15 @@ void show_equip(void)
 
         /* Clear the line with the (possibly indented) index */
         put_str(tmp_val, j + 1, col);
+
+        /* RVIP: the cursor */
+        if (i == item_cursor)
+        {
+            c_put_str(TERM_L_BLUE, tmp_val, j + 1, col);
+            if (col)
+                c_put_str(TERM_L_BLUE, ">", j + 1, col - 1);
+            out_color[j] = TERM_L_BLUE;
+        }
 
         /* Mention the use */
         strnfmt(tmp_val, sizeof(tmp_val), "%-12s: ", mention_use(i));
@@ -2402,6 +2420,15 @@ void show_floor(const int* floor_list, int floor_num)
 
         /* Clear the line with the (possibly indented) index */
         put_str(tmp_val, j + 1, col);
+
+        /* RVIP: the cursor */
+        if ((0 - i) == item_cursor)
+        {
+            c_put_str(TERM_L_BLUE, tmp_val, j + 1, col);
+            if (col)
+                c_put_str(TERM_L_BLUE, ">", j + 1, col - 1);
+            out_color[j] = TERM_L_BLUE;
+        }
 
         /* Display the entry itself */
         c_put_str(out_color[j], out_desc[j], j + 1, col + 3);
@@ -2720,6 +2747,9 @@ bool get_item(int* cp, cptr pmt, cptr str, int mode)
     int floor_list[MAX_FLOOR_STACK];
     int floor_num;
 
+    /* RVIP: cursor in each list */
+    int cur_i, cur_e, cur_f;
+
 #ifdef ALLOW_REPEAT
 
     /* Get the item index */
@@ -2745,6 +2775,32 @@ bool get_item(int* cp, cptr pmt, cptr str, int mode)
     }
 
 #endif /* ALLOW_REPEAT */
+
+    /* RVIP: item chosen beforehand (inventory screen, item menu) */
+    if (item_preselect != ITEM_PRESELECT_NONE)
+    {
+        int k = item_preselect;
+        bool ok = (k >= INVEN_WIELD) ? use_equip : (k >= 0) ? use_inven : use_floor;
+
+        item_preselect = ITEM_PRESELECT_NONE;
+
+        if (ok && get_item_okay(k) && get_item_allow(k))
+        {
+            (*cp) = k;
+#ifdef ALLOW_REPEAT
+            repeat_push(k);
+#endif
+        }
+        else
+        {
+            ok = FALSE;
+            msg_print("You cannot do that with this item.");
+        }
+
+        item_tester_tval = 0;
+        item_tester_hook = NULL;
+        return (ok);
+    }
 
     // save the mode in a global variable version
     p_ptr->get_item_mode = mode;
@@ -2863,11 +2919,11 @@ bool get_item(int* cp, cptr pmt, cptr str, int mode)
         }
     }
 
-    /* Option to always show a list */
-    if (auto_display_lists)
-    {
-        p_ptr->command_see = TRUE;
-    }
+    /* RVIP: always show the list, with a cursor */
+    p_ptr->command_see = TRUE;
+    cur_i = i1;
+    cur_e = e1;
+    cur_f = f1;
 
     /* Start out in "display" mode */
     if (p_ptr->command_see)
@@ -2919,8 +2975,10 @@ bool get_item(int* cp, cptr pmt, cptr str, int mode)
         if (p_ptr->command_wrk == (USE_INVEN))
         {
             /* Redraw if needed */
+            item_cursor = cur_i;
             if (p_ptr->command_see)
                 show_inven();
+            item_cursor = ITEM_PRESELECT_NONE;
 
             /* Begin the prompt */
             sprintf(out_val, "Inven:");
@@ -2953,8 +3011,10 @@ bool get_item(int* cp, cptr pmt, cptr str, int mode)
         else if (p_ptr->command_wrk == (USE_EQUIP))
         {
             /* Redraw if needed */
+            item_cursor = cur_e;
             if (p_ptr->command_see)
                 show_equip();
+            item_cursor = ITEM_PRESELECT_NONE;
 
             /* Begin the prompt */
             sprintf(out_val, "Equip:");
@@ -2987,8 +3047,10 @@ bool get_item(int* cp, cptr pmt, cptr str, int mode)
         else
         {
             /* Redraw if needed */
+            item_cursor = (f1 <= f2) ? 0 - floor_list[cur_f] : ITEM_PRESELECT_NONE;
             if (p_ptr->command_see)
                 show_floor(floor_list, floor_num);
+            item_cursor = ITEM_PRESELECT_NONE;
 
             /* Begin the prompt */
             sprintf(out_val, "Floor:");
@@ -3027,6 +3089,81 @@ bool get_item(int* cp, cptr pmt, cptr str, int mode)
 
         /* Get a key */
         which = inkey();
+
+        /* RVIP: 8/2 move the cursor, 4/6 switch lists, 5/Enter choose */
+        if ((which == '8') || (which == '2'))
+        {
+            int dir = (which == '8') ? -1 : 1;
+            int *cur, lo, hi, n, t;
+
+            if (p_ptr->command_wrk == (USE_INVEN))
+                cur = &cur_i, lo = i1, hi = i2;
+            else if (p_ptr->command_wrk == (USE_EQUIP))
+                cur = &cur_e, lo = e1, hi = e2;
+            else
+                cur = &cur_f, lo = f1, hi = f2;
+
+            n = hi - lo + 1;
+            for (t = 1; t <= n; t++)
+            {
+                k = lo + (((*cur - lo) + dir * t) % n + n) % n;
+                if (get_item_okay((cur == &cur_f) ? 0 - floor_list[k] : k))
+                {
+                    *cur = k;
+                    break;
+                }
+            }
+            continue;
+        }
+        if ((which == '4') || (which == '6'))
+        {
+            /* Cycle inventory -> equipment -> floor */
+            int order[3] = { USE_INVEN, USE_EQUIP, USE_FLOOR };
+            bool ok[3];
+            int w = 0, t;
+
+            ok[0] = allow_inven;
+            ok[1] = allow_equip;
+            ok[2] = allow_floor;
+            for (t = 0; t < 3; t++)
+                if (order[t] == p_ptr->command_wrk)
+                    w = t;
+            for (t = 1; t < 3; t++)
+            {
+                int nw = (w + ((which == '6') ? t : 3 - t)) % 3;
+
+                if (ok[nw])
+                {
+                    p_ptr->command_wrk = order[nw];
+                    break;
+                }
+            }
+            screen_load();
+            screen_save();
+            continue;
+        }
+        if ((which == '5') || (which == '\r') || (which == '\n'))
+        {
+            if (p_ptr->command_wrk == (USE_INVEN))
+                k = allow_inven ? cur_i : -1000;
+            else if (p_ptr->command_wrk == (USE_EQUIP))
+                k = allow_equip ? cur_e : -1000;
+            else
+                k = allow_floor ? 0 - floor_list[cur_f] : -1000;
+
+            if ((k == -1000) || !get_item_okay(k))
+            {
+                bell("Illegal object choice (cursor)!");
+                continue;
+            }
+            if (get_item_allow(k))
+            {
+                (*cp) = k;
+                item = TRUE;
+            }
+            done = TRUE;
+            continue;
+        }
 
         /* Parse it */
         switch (which)

@@ -773,10 +773,22 @@ static void process_command(void)
     {
     /* Ignore */
     case ' ':
-    case '\n':
-    case '\r':
     case '\a':
     {
+        break;
+    }
+
+    /* RVIP: command menu on Enter */
+    case '\n':
+    case '\r':
+    {
+        int k = do_cmd_command_menu();
+
+        if (k)
+        {
+            p_ptr->command_cmd = k;
+            process_command();
+        }
         break;
     }
 
@@ -849,14 +861,14 @@ static void process_command(void)
     /* Equipment list */
     case 'e':
     {
-        do_cmd_equip();
+        do_cmd_inven_screen(TRUE);
         break;
     }
 
     /* Inventory list */
     case 'i':
     {
-        do_cmd_inven();
+        do_cmd_inven_screen(FALSE);
         break;
     }
 
@@ -1997,6 +2009,15 @@ static void process_player(void)
                  */
                 p_ptr->restoring = FALSE;
 
+                /* RVIP: reopen the inventory after an item action */
+                if (inven_reopen)
+                {
+                    if (!monster_in_view() && !p_ptr->leaving
+                        && !p_ptr->is_dead)
+                        p_ptr->command_new = inven_reopen;
+                    inven_reopen = 0;
+                }
+
                 /* Get a command (normal) */
                 request_command();
 
@@ -2856,6 +2877,10 @@ static void process_some_user_pref_files(void)
 
     /* Process the "user.prf" file */
     (void)process_pref_file("user.prf");
+
+    /* RVIP: window layout for this frontend ("user-x11.prf"), after the savefile */
+    (void)strnfmt(buf, sizeof(buf), "user-%s.prf", ANGBAND_SYS);
+    (void)process_pref_file(buf);
 
     /* Process the "user.scb" autoinscriptions file */
     (void)process_pref_file("user.scb");

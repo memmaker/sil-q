@@ -98,6 +98,9 @@
 #define PANEL_WID_FIXED 33
 #define PANEL_WID (use_bigtile ? 16 : PANEL_WID_FIXED)
 
+/* RVIP: no preselected item / no cursor (cmd-rvip.c) */
+#define ITEM_PRESELECT_NONE (-1000)
+
 #define ROW_MAP 1
 #define COL_MAP 13
 
@@ -3137,12 +3140,20 @@
 #define SOUND_SHUTDOOR 23
 #define SOUND_TPLEVEL 24
 
+/* RVIP: sound-only events (no message type), raised by the game code */
+#define SOUND_MON_HIT 30
+#define SOUND_WIELD 31
+#define SOUND_SING 32
+#define SOUND_BREATH 33
+#define SOUND_LOCKPICK 34
+#define SOUND_DISARM 35
+
 /*
  * Mega-Hack -- maximum known sounds
  *
  * Should be the same as MSG_MAX for compatibility reasons.
  */
-#define SOUND_MAX MSG_MAX
+#define SOUND_MAX 36
 
 /*
  * Maximum number of macro trigger names

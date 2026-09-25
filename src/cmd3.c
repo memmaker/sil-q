@@ -645,6 +645,9 @@ void do_cmd_wield(object_type* default_o_ptr, int default_item)
     if (!combine)
         p_ptr->equip_cnt++;
 
+    /* RVIP: sound event */
+    sound(SOUND_WIELD);
+
     /* Where is the item now */
     if ((slot == INVEN_WIELD)
         || ((slot == INVEN_ARM) && (o_ptr->tval != TV_SHIELD)))

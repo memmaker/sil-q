@@ -121,7 +121,7 @@ extern cptr* macro__act;
 extern term* angband_term[ANGBAND_TERM_MAX];
 extern char angband_term_name[ANGBAND_TERM_MAX][16];
 extern byte angband_color_table[256][4];
-extern const cptr angband_sound_name[MSG_MAX];
+extern const cptr angband_sound_name[SOUND_MAX];
 extern int view_n;
 extern u16b* view_g;
 extern int temp_n;
@@ -394,6 +394,14 @@ extern bool explore_step(void);
 extern void do_cmd_explore(void);
 extern void do_cmd_stairs(bool up);
 extern void do_cmd_jump(void);
+
+/* cmd-rvip.c */
+extern int item_preselect;
+extern int item_cursor;
+extern char inven_reopen;
+extern bool monster_in_view(void);
+extern int do_cmd_command_menu(void);
+extern void do_cmd_inven_screen(bool equip);
 extern void do_cmd_run(void);
 extern void do_cmd_hold(void);
 extern void do_cmd_pickup(void);
