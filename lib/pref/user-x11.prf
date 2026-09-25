@@ -77,3 +77,5 @@ W:2:7:1
 W:3:9:1
 W:4:5:1
 W:5:4:1
+# Window 6: equipment (the web port's Equipment window; unused under X11)
+W:6:1:1

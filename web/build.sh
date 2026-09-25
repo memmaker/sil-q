@@ -26,7 +26,7 @@ emcc -O2 -fcommon -std=gnu99 -DUSE_WEB -Isrc -w \
 	-sFORCE_FILESYSTEM -lidbfs.js -sENVIRONMENT=web \
 	--preload-file web/stage/lib@/sil-q/lib
 
-cp web/index.html web/sil.js "$OUT/"
+cp web/index.html web/rvip-wm.js web/sil.js "$OUT/"
 # Sound effects and music are fetched by the page, not preloaded
 mkdir -p "$OUT/sound" && cp lib/xtra/sound/*.wav lib/xtra/sound/sound.cfg "$OUT/sound/"
 mkdir -p "$OUT/music" && cp web/music/new_town.ogg "$OUT/music/"
