@@ -19,7 +19,7 @@
  */
 void safe_setuid_drop(void)
 {
-#ifdef SET_UID
+#if defined(SET_UID) && !defined(USE_WEB)
 
 #ifdef SAFE_SETUID
 
@@ -60,7 +60,7 @@ void safe_setuid_drop(void)
  */
 void safe_setuid_grab(void)
 {
-#ifdef SET_UID
+#if defined(SET_UID) && !defined(USE_WEB)
 
 #ifdef SAFE_SETUID
 

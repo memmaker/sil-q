@@ -31,6 +31,8 @@ extern errr init_vcs(int argc, char** argv);
 extern const char help_xpj[];
 extern const char help_xaw[];
 extern const char help_x11[];
+extern const char help_web[];
+extern errr init_web(int argc, char** argv);
 extern const char help_vcs[];
 extern const char help_gtk[];
 extern const char help_gcu[];

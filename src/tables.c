@@ -667,7 +667,8 @@ cptr option_desc[OPT_MAX] = {
 /*
  * Options -- normal values
  */
-const bool option_norm[OPT_MAX] = {
+/* RVIP: not const, the web frontend changes two defaults */
+bool option_norm[OPT_MAX] = {
     FALSE, /* OPT_hjkl_movement */
     TRUE, /* OPT_quick_messages */
     FALSE, /* OPT_angband_keyset */

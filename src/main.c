@@ -36,6 +36,11 @@ static const struct module modules[] = {
     { "xaw", help_xaw, init_xaw },
 #endif /* USE_XAW */
 
+#ifdef USE_WEB
+    /* Browser build: registered as "x11" so the X11 pref files are used */
+    { "x11", help_web, init_web },
+#endif /* USE_WEB */
+
 #ifdef USE_X11
     { "x11", help_x11, init_x11 },
 #endif /* USE_X11 */
@@ -538,6 +543,9 @@ int main(int argc, char* argv[])
             /* Get the savefile name */
             my_strcpy(op_ptr->full_name, arg, sizeof(op_ptr->full_name));
 
+            /* RVIP: build the savefile path, or -u starts a new character */
+            process_player_name(TRUE);
+
             // Sil-y:
             game_in_progress = TRUE;
             continue;
@@ -609,8 +617,10 @@ int main(int argc, char* argv[])
     /* Process the player name */
     ////process_player_name(TRUE);
 
-    /* Install "quit" hook */
+#ifndef USE_WEB
+    /* Install "quit" hook (the web frontend keeps its own) */
     quit_aux = quit_hook;
+#endif
 
     /* Try the modules in the order specified by modules[] */
     for (i = 0; i < (int)N_ELEMENTS(modules); i++)
