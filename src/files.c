@@ -4867,6 +4867,9 @@ static void close_game_aux(void)
     /* Enter player in high score list */
     create_score(&the_score);
     enter_score(&the_score);
+#ifdef USE_WEB
+    { void web_run_end(int score); web_run_end(score_points(&the_score)); }
+#endif
 
     // cure hallucination and rage
     p_ptr->rage = 0;

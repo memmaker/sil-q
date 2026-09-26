@@ -74,6 +74,34 @@ EM_JS(void, js_color, (int i, int r, int g, int b), {
 	Module.qb.color(i, r, g, b);
 });
 
+/* Run report (roguelikes-index/server/CONTRACT.md): fire-and-forget GET,
+   never throws, offline just fails silently. Negative ints are omitted. */
+EM_JS(void, js_beacon, (const char *g, const char *ev, const char *name, const char *killer, int depth, int score, int turns, int lvl), {
+	try {
+		var p = [['g', UTF8ToString(g)], ['ev', UTF8ToString(ev)], ['name', name ? UTF8ToString(name) : ''],
+		         ['killer', killer ? UTF8ToString(killer) : ''], ['depth', depth], ['score', score], ['turns', turns], ['lvl', lvl]];
+		var q = p.filter(function (a) { return a[1] !== '' && !(a[1] < 0); })
+		         .map(function (a) { return a[0] + '=' + encodeURIComponent(a[1]); }).join('&');
+		fetch('/roguelikes/beacon?' + q, { keepalive: true, mode: 'no-cors' }).catch(function () {});
+	} catch (e) {}
+});
+
+/* Called from close_game_aux() once the run is over (death, escape, suicide) */
+void web_run_end(int score)
+{
+	char k[80], *e;
+	const char *ev = "death", *kp = k;
+
+	my_strcpy(k, p_ptr->died_from, sizeof(k));
+	if ((e = strstr(k, " (while hallucinating)"))) *e = '\0';
+	if (p_ptr->escaped) ev = "win", kp = NULL;
+	else if (streq(k, "their own hand")) ev = "quit", kp = NULL;
+	else if (prefix(k, "a ")) kp += 2;
+	else if (prefix(k, "an ")) kp += 3;
+	else if (prefix(k, "the ")) kp += 4;
+	js_beacon("sil-q", ev, op_ptr->full_name, kp, p_ptr->depth, score, (int)playerturn, -1);
+}
+
 EM_JS(int, js_term_cols, (int t), {
 	return Module.qb.termCols(t);
 });
