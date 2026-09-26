@@ -102,3 +102,9 @@ RVIP import (`~/Games/rvip-tools/RVIP.md`, case A) and web port (`~/Games/rogue2
 - `git log` shows a commit `wip: port + web (WASM) build state` that was
   made and pushed (creating `memmaker/sil-q`) by another process while this
   import was running; its content is this import's working tree at that time.
+- Prompt line (RVIP step 5 / W4, 2026-09-26): the live message row is shown in a
+  box over the map by `RvipWM.prompt` (rvip-wm.js). A key hides it only while
+  the game waits for a command, so a question stays up until answered.
+  Here: `js_next_event(inkey_flag && character_generated)` in `src/main-web.c`;
+  the page tracks term 0 row 0 (`row0` in `text`/`wipe`/`clear`) and sends it on
+  `fresh(0)`.
