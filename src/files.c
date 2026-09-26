@@ -3152,8 +3152,8 @@ bool get_name(void)
             QUESTION_COL + 38 + 2, INSTRUCT_ROW + 1, -1, TERM_L_WHITE, "ESC");
     }
 
-    // use old name as a default
-    my_strcpy(tmp, op_ptr->full_name, sizeof(tmp));
+    // use old name as a default (a new character starts empty)
+    my_strcpy(tmp, character_dungeon ? op_ptr->full_name : "", sizeof(tmp));
 
     // save a copy too
     my_strcpy(old_name, op_ptr->full_name, sizeof(old_name));
