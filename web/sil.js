@@ -359,15 +359,20 @@
 	}
 
 	/* Sound effects (lib/xtra/sound/sound.cfg) and music, both off by default */
-	var audio = { sound: false, music: false, cfg: {}, cache: {}, depth: -1,
+	var audio = { sound: false, music: false, cfg: null, cache: {}, depth: -1,
 		song: new Audio('music/new_town.ogg') };
 	audio.song.loop = true;
-	fetch('sound/sound.cfg').then(function (r) { return r.text(); }).then(function (t) {
+	/* Read from the preloaded FS, never fetch(): a .cfg comes as octet-stream and
+	   the Claude browser pane turns that into a download prompt. */
+	function loadSoundCfg() {
+		audio.cfg = {};
+		var t = '';
+		try { t = Module.FS.readFile('/sil-q/lib/xtra/sound/sound.cfg', { encoding: 'utf8' }); } catch (e) { }
 		t.split('\n').forEach(function (l) {
 			var m = /^(\w+)\s*=\s*(.+)$/.exec(l.trim());
 			if (m) audio.cfg[m[1]] = m[2].split(/\s+/);
 		});
-	});
+	}
 
 	function updateMusic() {
 		/* Sil-Q has no town and no music of its own: loop the tune while a game is on */
@@ -390,6 +395,7 @@
 
 	var qb = {
 		sound: function (name) {
+			if (!audio.cfg) loadSoundCfg();
 			var files = audio.sound && audio.cfg[name];
 			if (!files) return;
 			var f = files[Math.floor(Math.random() * files.length)];

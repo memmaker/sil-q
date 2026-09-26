@@ -16,6 +16,7 @@ cp lib/xtra/graf/16x16_microchasm.png "$OUT/tiles.png"
 SRCS=$(tr -d '\r' < src/Makefile.src | sed -n '/^ZFILES/,/^MAINFILES/p;/^ANGFILES/,/^$/p' \
 	| grep -o '[a-z0-9_-]*\.o' | grep -v '^main' | grep -v '^maid' | sed 's/\.o$/.c/;s|^|src/|' | sort -u)
 
+mkdir -p web/stage/lib/xtra/sound && cp lib/xtra/sound/sound.cfg web/stage/lib/xtra/sound/sound.cfg
 emcc -O2 -fcommon -std=gnu99 -DUSE_WEB -Isrc -w \
 	$SRCS src/main.c src/main-web.c \
 	-o "$OUT/sil-core.js" \
