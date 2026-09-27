@@ -363,15 +363,23 @@ static errr Term_xtra_web(int n, int v)
 	return (1);
 }
 
+/* No cursor on the hero at the command prompt (RVIP finetuning, Map) */
+static int web_curs_on_hero(int x, int y)
+{
+	if (web_idx() || !character_generated || !inkey_flag) return (0);
+	return ((y == ROW_MAP + p_ptr->py - p_ptr->wy) &&
+	        (x == COL_MAP + (p_ptr->px - p_ptr->wx) * (use_bigtile ? 2 : 1)));
+}
+
 static errr Term_curs_web(int x, int y)
 {
-	js_curs(web_idx(), x, y, 1);
+	if (!web_curs_on_hero(x, y)) js_curs(web_idx(), x, y, 1);
 	return (0);
 }
 
 static errr Term_bigcurs_web(int x, int y)
 {
-	js_curs(web_idx(), x, y, 2);
+	if (!web_curs_on_hero(x, y)) js_curs(web_idx(), x, y, 2);
 	return (0);
 }
 
