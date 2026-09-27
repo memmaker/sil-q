@@ -124,7 +124,7 @@ typedef struct
 } rvip_group;
 
 static const rvip_cmd cmds_move[]
-    = { { ';', "Walk" }, { '.', "Run" }, { 'z', "Hold still" },
+    = { { 'z', "Hold still" },
           { 'Z', "Rest" }, { 'P', "Auto-explore" },
           { '<', "Go up (walks to known stairs)" },
           { '>', "Go down (walks to known stairs)" },
@@ -168,7 +168,7 @@ static const rvip_cmd cmds_game[]
           { 0, NULL } };
 
 static const rvip_group cmd_groups[]
-    = { { "Moving", cmds_move }, { "Doors and terrain", cmds_terrain },
+    = { { "Exploring and stairs", cmds_move }, { "Doors and terrain", cmds_terrain },
           { "Fighting and songs", cmds_fight }, { "Items", cmds_items },
           { "Information", cmds_info }, { "Game", cmds_game } };
 
