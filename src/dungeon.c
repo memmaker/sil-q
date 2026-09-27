@@ -1922,6 +1922,12 @@ static void process_player(void)
         /* Auto-exploring */
         else if (auto_explore)
         {
+#ifdef USE_WEB
+            /* Paint every step so auto-explore is visible (RVIP finetuning) */
+            handle_stuff();
+            Term_fresh();
+            Term_xtra(TERM_XTRA_DELAY, 40);
+#endif
             explore_step();
         }
 
