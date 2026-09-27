@@ -128,6 +128,11 @@ EM_JS(void, js_apply_layout, (int t, int cols, int rows), {
 });
 
 /* Next queued input: -1 none, else key (Sil's z-term has no mouse) */
+/* Tiles (1) or text (0) as the page's Tiles button says; -1: no change */
+EM_JS(int, js_tiles_switch, (void), {
+	return Module.qb.tilesSwitch();
+});
+
 EM_JS(int, js_next_event, (int at_cmd), {
 	return Module.qb.nextEvent(at_cmd);
 });
@@ -250,6 +255,21 @@ static int web_pump(void)
 	{
 		Term_keypress(k);
 		got = 1;
+	}
+
+	/* Tiles <-> text (RVIP finetuning "Tiles: None"): only at the command prompt */
+	if (inkey_flag && character_generated && !got)
+	{
+		int on = js_tiles_switch();
+
+		if ((on >= 0) && (on != (use_graphics != GRAPHICS_NONE)))
+		{
+			use_graphics = arg_graphics = on ? GRAPHICS_MICROCHASM : GRAPHICS_NONE;
+			use_bigtile = on ? TRUE : FALSE;
+			reset_visuals(TRUE);
+			Term_keypress(KTRL('R'));
+			got = 1;
+		}
 	}
 
 	/* Safe autosave: only while waiting for a command */

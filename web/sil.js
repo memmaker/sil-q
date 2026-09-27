@@ -116,12 +116,15 @@
 				});
 				if (s.audio) d.audio = { sound: s.audio.sound === true, music: s.audio.music === true };
 				if (s.wm) d.wm = s.wm;
+				if (s.text === true) d.text = true;
 				if (s.titles) Object.keys(s.titles).forEach(function (k) {
 					if (typeof s.titles[k] === 'string' && d.font[k]) d.titles[k] = s.titles[k].slice(0, 60);
 				});
 			}
 		} catch (err) { /* no layout saved yet */ }
 		L = d;
+		tilesSwitch = (L.text || (tilesDone && !tilesReady)) ? 0 : -1;
+		renderTiles();
 		if (L.audio) { audio.sound = !!L.audio.sound; audio.music = !!L.audio.music; renderAudio(); }
 	}
 
@@ -297,7 +300,7 @@
 	}
 
 	function resetLayout() {
-		L = Object.assign(defaultLayout(), { audio: L.audio, wm: wm.state() });
+		L = Object.assign(defaultLayout(), { audio: L.audio, text: L.text, wm: wm.state() });
 		scheduleLayout();
 		saveLayout();
 	}
@@ -384,8 +387,22 @@
 		audio[kind] = !audio[kind];
 		L.audio = { sound: audio.sound, music: audio.music };
 		saveLayout();
+		$('btn-tiles').onclick = toggleTiles;
 		renderAudio();
 		updateMusic();
+	}
+
+	/* Tiles: MicroChasm / None.  The game switches at the command prompt. */
+	var tilesSwitch = -1;
+	function toggleTiles() {
+		if (!tilesReady && !L.text) return;
+		L.text = !L.text;
+		tilesSwitch = L.text ? 0 : 1;
+		saveLayout();
+		renderTiles();
+	}
+	function renderTiles() {
+		if ($('btn-tiles')) $('btn-tiles').textContent = 'Tiles: ' + ((L && L.text) || !tilesReady ? 'None' : 'MicroChasm');
 	}
 
 	function renderAudio() {
@@ -501,6 +518,7 @@
 
 		bell: function () { },
 
+		tilesSwitch: function () { var s = tilesSwitch; tilesSwitch = -1; return s; },
 		nextEvent: function (atCmd) {
 			RvipWM.prompt.wait(atCmd);
 			if (!events.length) return -1;
@@ -772,6 +790,8 @@
 	function tilesFinished(ok) {
 		tilesReady = ok;
 		tilesDone = true;
+		if (!ok) tilesSwitch = 0;
+		if (L) renderTiles();
 		if (!ok) status('Could not load the tile set; using text.', true);
 		if (tilesWait) Module.removeRunDependency('tiles');
 	}
