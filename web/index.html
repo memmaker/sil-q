@@ -30,7 +30,7 @@
 	.wm-menu > button:hover, .wm-menu > label:hover { background: #2b2b33; }
 	.wm-menu > hr { border: 0; border-top: 1px solid var(--line, #2b2b33); margin: 4px 0; }
 	#bar .hint { white-space: nowrap; min-width: 0; flex: 0 1 auto; color: var(--dim); overflow: hidden; text-overflow: ellipsis; }
-	button { background: #22222a; color: var(--text); border: 1px solid var(--line); border-radius: 4px;
+	button, #bar select, .wm-btns select { background: #22222a; color: var(--text); border: 1px solid var(--line); border-radius: 4px;
 		padding: 2px 10px; font: inherit; cursor: pointer; }
 	button:hover { border-color: var(--accent); }
 	#status { position: fixed; left: 50%; top: 40px; transform: translateX(-50%); z-index: 5;
@@ -49,6 +49,7 @@
 	.win > .t .zoom { flex: none; display: flex; gap: 2px; visibility: hidden; }
 	.win > .t:hover .zoom { visibility: visible; }
 	.win > .t .zoom button { padding: 0 5px; font-size: 11px; line-height: 14px; height: 16px; }
+	.wm-btns select { padding: 0 2px; font-size: 11px; height: 16px; max-width: 120px; }
 	.win > .body { flex: 1; min-height: 0; overflow: hidden; }
 	.win canvas { display: block; }
 	.split { position: absolute; background: var(--gut); z-index: 2; touch-action: none; }
@@ -99,6 +100,7 @@
 	<span class="sep"></span>
 	<button id="btn-layout" title="Put the windows back where they started">Reset windows</button>
 	<button id="btn-tiles" title="Map as tiles or as text">Tiles: MicroChasm</button>
+	<select id="sel-font" title="Font for the text windows (the map has its own in text mode)"><option value="">Font: default</option></select>
 	<button id="btn-audio" title="Sound effects and music">Audio ▾</button>
 	<input type="file" id="import-file" hidden>
 	<span class="sp"></span>
