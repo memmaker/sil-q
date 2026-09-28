@@ -36,7 +36,7 @@ SAVING = '''<ul>
 WEB = '''<ul>
 <li><strong>Windows:</strong> the map fills the big window; Inventory, Monster list and Combat rolls are on the right; Messages and Recall along the bottom.</li>
 <li><strong>Resize windows</strong> by dragging the gaps between them. The windows always fill the screen and never overlap; the game redraws them at their new size. <em>Reset windows</em> puts everything back.</li>
-<li><strong>Zoom:</strong> <em>Zoom −</em> / <em>Zoom +</em> in the top bar change the size of the map tiles. Hover over a small window's title to show its <em>A−</em> / <em>A+</em> buttons, which change its text size.</li>
+<li><strong>Zoom:</strong> <em>A−</em> / <em>A+</em> on the Map title bar (shown on hover) change the size of the map tiles. Hover over a small window's title to show its <em>A−</em> / <em>A+</em> buttons, which change its text size.</li>
 <li><strong>Rename a window</strong> by clicking its title, typing a new name and pressing <kbd>Enter</kbd> (<kbd>Esc</kbd> cancels, an empty name restores the default).</li>
 <li><strong>Keys:</strong> arrow keys, the numeric keypad or <kbd>1</kbd>–<kbd>9</kbd> move you; <kbd>Shift</kbd> + direction runs. Sil-Q has no mouse support: everything is on the keyboard, and <kbd>Enter</kbd> lists every command.</li>
 <li><strong>Sound and music</strong> are off until you switch them on in the top bar. The effects come from Sil-Q's own samples and the Dubtrain Angband Sound Pack; the music is a single looping tune.</li>
