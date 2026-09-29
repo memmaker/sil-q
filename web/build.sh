@@ -31,9 +31,6 @@ cp web/index.html web/sil.js "$OUT/"
 # Sound effects and music are fetched by the page, not preloaded
 mkdir -p "$OUT/sound" && cp lib/xtra/sound/*.wav lib/xtra/sound/sound.cfg "$OUT/sound/"
 mkdir -p "$OUT/music" && cp web/music/new_town.ogg "$OUT/music/"
-# Font choosers: the index page's fonts/*.woff (loaded from ../fonts/)
-FONTS="${FONTS:-$HOME/Games/roguelikes-index/fonts}"
-(ls "$FONTS" 2>/dev/null | sed -n 's/\.woff$//p') | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().split()))' > "$OUT/fonts.json"
 # Game guide for the Help button, from ~/Desktop/Games/Roguelikes/Docs
 python3 web/make-help.py > "$OUT/help.html"
 rm -rf web/stage
