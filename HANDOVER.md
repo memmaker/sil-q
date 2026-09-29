@@ -1,6 +1,6 @@
 # Sil-Q 1.5.0: handover
 
-RVIP import (`~/Games/rvip-tools/RVIP.md`, case A) and web port (`~/Games/rogue2wasm.md`).
+RVIP port (`~/Games/rvip-tools/RVIP.md`, case A).
 
 ## Source and changes
 
@@ -36,13 +36,13 @@ RVIP import (`~/Games/rvip-tools/RVIP.md`, case A) and web port (`~/Games/rogue2
   direction from `ddd[]` used as an index into `ddy_ddd[]`). Fixed. ASan
   binary and objects removed.
 - **Auto-explore `P`, stairs `<`/`>`** (`cmd2.c` `explore_step()`,
-  `do_cmd_stairs()`), done before this session; verified: stops on monsters in
+  `do_cmd_stairs()`): stops on monsters in
   view, disturbances, locked doors (skipped on the next press).
 - **Enter menu** (`src/cmd-rvip.c` `do_cmd_command_menu()`, called from
   `process_command()` for `\r`/`\n`): six groups (following the `?` help
   screen), 60 commands, content-sized boxes (`rvip_box()`, aligned to the
   two-cell big tiles so restoring the screen leaves no half tiles).
-- **Inventory 3c** (`cmd-rvip.c` `do_cmd_inven_screen()`): cursor, letter =
+- **Inventory** (`cmd-rvip.c` `do_cmd_inven_screen()`): cursor, letter =
   main action, Shift = drop, Ctrl = examine, Enter/5 = item menu, numpad keys,
   reopen after an action unless a monster is in view (`inven_reopen`, checked
   before `request_command()` in `dungeon.c`). Actions run the normal
@@ -77,7 +77,7 @@ RVIP import (`~/Games/rvip-tools/RVIP.md`, case A) and web port (`~/Games/rogue2
   Sil-Q's title menu (tutorial / new / open by name). After death or Ctrl-X
   the game returns to that title menu; its "Quit" shows the Play-again overlay.
 - Music: `web/music/new_town.ogg` loops while a game is on (Sil-Q has no
-  town and no music). Sound and music buttons start off.
+  town and no music). Audio ▾ toggles start off.
 - Help page: `web/make-help.py` (Docs page + web saving text + "About this version").
 
 ## Tested
@@ -94,17 +94,17 @@ RVIP import (`~/Games/rvip-tools/RVIP.md`, case A) and web port (`~/Games/rogue2
   and played, sound toggle persisted, 1000×650 resize, Ctrl-X → scores →
   title menu → Quit → Play-again overlay; no console errors. Test saves in
   the browser were deleted afterwards; test files in `lib/` too.
-- Not tested: Combat rolls / Recall window contents in a real fight on the
-  web, the tutorial on the web, Import save.
 
-## Notes for next time
+## Notes
 
-- `git log` shows a commit `wip: port + web (WASM) build state` that was
-  made and pushed (creating `memmaker/sil-q`) by another process while this
-  import was running; its content is this import's working tree at that time.
-- Prompt line (RVIP step 5 / W4, 2026-09-26): the live message row is shown in a
-  box over the map by `RvipWM.prompt` (rvip-wm.js). A key hides it only while
-  the game waits for a command, so a question stays up until answered.
-  Here: `js_next_event(inkey_flag && character_generated)` in `src/main-web.c`;
-  the page tracks term 0 row 0 (`row0` in `text`/`wipe`/`clear`) and sends it on
-  `fresh(0)`.
+- Prompt line: `js_next_event(inkey_flag && character_generated)` in
+  `src/main-web.c` tells the page the game waits for a command; the page
+  tracks term 0 row 0 (`row0` in `text`/`wipe`/`clear`) and sends it to
+  `RvipWM.prompt` on `fresh(0)`.
+
+## Open
+
+- Presentation rule 6: every term is still a canvas in `web/sil.js`; text
+  windows should be HTML, only the map a canvas.
+- Not tested on the web: Combat rolls / Recall window contents in a real
+  fight, the tutorial, Import save.
